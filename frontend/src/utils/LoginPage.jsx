@@ -12,12 +12,12 @@ export default function LoginPage() {
       password: password,
     };
     //fetching data
-    const data = (
-      await axios.post("url", user, {
+    const {data} = (
+      await axios.post("http://localhost:8000/api/token/", user, {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      })
-    ).json();
+      }, {withCredentials: true})
+    )
+    console.log(data.data);
     const accessToken = await data["access"]; // <--getting access token
     localStorage.clear();
     localStorage.setItem("access_token", data.access);

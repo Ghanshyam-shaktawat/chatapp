@@ -9,7 +9,7 @@ export default function Dashboard() {
     } else {
       (async () => {
         try {
-          const data = await axios.get("url", {
+          const data = await axios.get("http://localhost:8000/api/home/", {
             headers: { "content-Type": "application/json" },
           });
           setMessage(data.message);

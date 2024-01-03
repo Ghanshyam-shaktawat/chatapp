@@ -1,9 +1,9 @@
 import { Link } from "@mui/material";
 import { React, useState, useEffect } from "react";
-import "/utils.css";
+
 
 export default function Navigation() {
-  const [isAuth, setIsAuth] = useState(flase);
+  const [isAuth, setIsAuth] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("access-token") !== null) {
       setIsAuth(true);

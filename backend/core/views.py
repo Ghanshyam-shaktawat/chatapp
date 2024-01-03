@@ -20,7 +20,7 @@ def get_routes(request):
     routes = [
         'api/token/',
         'api/token/refresh/',
-        'api/home',
+        'api/home/',
     ]
     return Response(routes)
 

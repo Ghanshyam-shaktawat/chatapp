@@ -5,7 +5,7 @@ export default function Logout() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await axios.post(
+        const { data } = await axios.post(
           "url",
           {
             refresh_token: localStorage.getItem("refresh_token"),
