@@ -32,13 +32,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist'
@@ -66,9 +66,10 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
      'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
-     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
      'ROTATE_REFRESH_TOKENS': True,
-     'BLACKLIST_AFTER_ROTATION': True
+     'BLACKLIST_AFTER_ROTATION': True,
+     'UPDATE_LAST_LOGIN': False,
 }
 
 ROOT_URLCONF = 'chatapp.urls'
