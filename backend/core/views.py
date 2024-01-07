@@ -37,3 +37,8 @@ class TestAPI(APIView):
     def get(self, request):
         content = {'message': 'Welcome to JWT Authentication page!'}
         return Response(content)
+    
+
+class EditProfileView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = User.objects.all()
