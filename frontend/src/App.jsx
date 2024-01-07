@@ -1,24 +1,29 @@
-import { useState } from "react";
 import "./App.css";
-import LoginPage from "./utils/LoginPage";
-import RegisterPage from "./utils/RegisterPage";
+import { useState } from "react";
 import { Routes, BrowserRouter, Route } from "react-router-dom";
-import Dashboard from "./utils/Dashboard";
-import Navigation from "./utils/Navigation";
+import Home from "./views/Home";
+import Login from "./views/Login";
+import Logout from "./views/Logout";
+import Register from "./views/Register";
+import MainWrapper from "./layouts/MainWrapper";
+import PrivateRoute from "./layouts/PrivateRoute";
 
 function App() {
   const [count, setCount] = useState(0);
   const [isLoggedIn, setLoginStatus] = useState(false);
+  console.log(Date.now() / 1000);
 
   return (
     <>
       <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/Register" element={<RegisterPage />} />
-          <Route path="/" element={<Dashboard />}></Route>
-        </Routes>
+        <MainWrapper>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/logout" element={<Logout />} />
+          </Routes>
+        </MainWrapper>
       </BrowserRouter>
     </>
   );
