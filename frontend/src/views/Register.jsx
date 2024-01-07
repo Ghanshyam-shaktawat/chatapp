@@ -1,34 +1,54 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { register } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+import { userAuthStore } from "../store/store";
 import { Box, TextField, Button } from "@mui/material";
-import axios from "axios";
 
-export default function RegisterPage() {
+function Register() {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password1, setPassword1] = useState("");
+  const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const isLoggedIn = userAuthStore((state) => state.isLoggedIn);
+  const navigate = useNavigate();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (password1 !== password2) {
-      alert("password doesnt match");
-      return; // do something to show user the error;
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/");
     }
+  }, []);
+
+  const resetForm = () => {
+    setUsername("");
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setPassword2("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const user = {
       username,
+      firstName,
+      LastName,
       email,
-      password1,
+      password,
       password2,
     };
-    const { data } = await axios.post("url", user, {
-      headers: { "Content-Type": "application/json" },
-    });
-    // do something if success
-    console.log(data);
-    window.location.href = "/login";
-  }
+    if (password === password2) {
+      const { error } = await register(user);
+      if (error) {
+        alert(JSON.stringify(error));
+      } else {
+        navigate("/Login");
+        resetForm();
+      }
+    }
+  };
   return (
     <>
       <Box component="form" onSubmit={handleSubmit}>
@@ -66,11 +86,10 @@ export default function RegisterPage() {
         ></TextField>
         <TextField
           required
-          min
           type="password"
-          value={password1}
+          value={password}
           placeholder="password"
-          onChange={(e) => setPassword1(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         ></TextField>
         <TextField
           required
@@ -79,8 +98,10 @@ export default function RegisterPage() {
           placeholder="confirm password"
           onChange={(e) => setPassword2(e.target.value)}
         ></TextField>
+        <p>{password !== password2 ? "password does not match" : ""}</p>
         <Button type="submit">Register</Button>
       </Box>
     </>
   );
 }
+export default Register;
