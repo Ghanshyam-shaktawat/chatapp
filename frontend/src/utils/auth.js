@@ -1,6 +1,6 @@
 import { userAuthStore } from "../store/store";
 import axios from "./axios";
-// import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 
 export const login = async (username, password) => {
@@ -10,7 +10,7 @@ export const login = async (username, password) => {
       password,
     });
     if (status === 200) {
-      setAuthUser(user.access, data.refresh);
+      setAuthUser(data.access, data.refresh);
     }
     return { data, error: null };
   } catch (error) {
@@ -27,16 +27,16 @@ export const register = async (
   lastName,
   email,
   password,
-  password2
+  password2,
 ) => {
   try {
-    const { data, status } = await axios.post("register/", {
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-      password2,
+    const { status } = await axios.post("register/", {
+      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password,
+      password2: password2,
     });
     if (status === 200) {
       return;
@@ -76,7 +76,7 @@ export const setAuthUser = (access_token, refresh_token) => {
     expires: 7,
     secure: true,
   });
-  const user = jwt_decode(access_token) ?? null;
+  const user = jwtDecode(access_token) ?? null;
 
   if (user) {
     userAuthStore.getState().setUser(user);
@@ -92,7 +92,7 @@ export const getAccessToken = async (refresh_token) => {
 };
 export const isAccessTokenExpired = (accessToken) => {
   try {
-    const decodedToken = jwt_decode(accessToken);
+    const decodedToken = jwtDecode(accessToken);
     return decodedToken.exp < Date.now() / 1000;
   } catch (err) {
     return true;

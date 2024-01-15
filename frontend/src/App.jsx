@@ -1,16 +1,14 @@
 import "./App.css";
-import { useState } from "react";
 import { Routes, BrowserRouter, Route } from "react-router-dom";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Logout from "./views/Logout";
 import Register from "./views/Register";
 import MainWrapper from "./layouts/MainWrapper";
-import PrivateRoute from "./layouts/PrivateRoute";
+// import PrivateRoute from "./layouts/PrivateRoute";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [isLoggedIn, setLoginStatus] = useState(false);
+  // const [isLoggedIn, setLoginStatus] = useState(false);
   console.log(Date.now() / 1000);
 
   return (

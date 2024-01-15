@@ -7,7 +7,7 @@ import { Box, TextField, Button } from "@mui/material";
 function Register() {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -31,16 +31,15 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = {
-      username,
-      firstName,
-      LastName,
-      email,
-      password,
-      password2,
-    };
     if (password === password2) {
-      const { error } = await register(user);
+      const { error } = await register(
+        username,
+        firstName,
+        lastName,
+        email,
+        password,
+        password2,
+      );
       if (error) {
         alert(JSON.stringify(error));
       } else {
@@ -57,15 +56,15 @@ function Register() {
           type="text"
           value={firstName}
           variant="outlined"
-          placeholder="username"
+          placeholder="Firstname"
           onChange={(e) => setFirstName(e.target.value)}
         ></TextField>
         <TextField
           required
           type="text"
-          value={LastName}
+          value={lastName}
           variant="outlined"
-          placeholder="username"
+          placeholder="Lastname"
           onChange={(e) => setLastName(e.target.value)}
         ></TextField>
         <TextField
