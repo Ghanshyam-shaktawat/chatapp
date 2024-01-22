@@ -16,9 +16,9 @@ const Home = () => {
 const LoggedInView = ({ user }) => {
   return (
     <div>
-      <h1></h1>
-      <Link to="/Private">
-        <button>Private</button>
+      <h1>{user.email}</h1>
+      <Link to="/chat">
+        <button>Chat</button>
       </Link>
       <Link to="/logout">
         <button>Logout</button>

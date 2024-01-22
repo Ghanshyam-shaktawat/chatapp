@@ -49,10 +49,19 @@ export const register = async (
   }
 };
 
-export const logout = () => {
+export const logout = async () => {
   Cookies.remove("access_token");
   Cookies.remove("refresh_token");
   userAuthStore.getState().setUser(null);
+
+  try {
+    const { error } = await axios.post("/logout");
+    if (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 export const setUser = async () => {
   const accessToken = Cookies.get("access_token");

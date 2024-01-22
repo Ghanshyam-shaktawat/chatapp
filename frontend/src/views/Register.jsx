@@ -57,6 +57,7 @@ function Register() {
           value={firstName}
           variant="outlined"
           placeholder="Firstname"
+          color="#fff000"
           onChange={(e) => setFirstName(e.target.value)}
         ></TextField>
         <TextField

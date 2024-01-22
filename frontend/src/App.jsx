@@ -5,12 +5,10 @@ import Login from "./views/Login";
 import Logout from "./views/Logout";
 import Register from "./views/Register";
 import MainWrapper from "./layouts/MainWrapper";
-// import PrivateRoute from "./layouts/PrivateRoute";
+import PrivateRoute from "./layouts/PrivateRoute";
+import Chat from "./pages/Chat";
 
 function App() {
-  // const [isLoggedIn, setLoginStatus] = useState(false);
-  console.log(Date.now() / 1000);
-
   return (
     <>
       <BrowserRouter>
@@ -20,6 +18,14 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/logout" element={<Logout />} />
+            <Route
+              path="/chat"
+              element={
+                <PrivateRoute>
+                  <Chat />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </MainWrapper>
       </BrowserRouter>
