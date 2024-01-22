@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
+
 const userAuthStore = create((set, get) => ({
   userData: null,
   loading: false,
@@ -11,5 +13,10 @@ const userAuthStore = create((set, get) => ({
   setLoading: (loading) => set({ loading }),
   isLoggedIn: () => get().userData !== null,
 }));
+
+const development = true;
+if (development) {
+  mountStoreDevtool("Store", userAuthStore);
+}
 
 export { userAuthStore };

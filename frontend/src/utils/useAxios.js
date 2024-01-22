@@ -13,12 +13,14 @@ const useAxios = () => {
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
-    if (!isAccessTokenExpired()) return req;
+    if (!isAccessTokenExpired(accessToken)) return req;
+
     const response = await getAccessToken(refreshToken);
     setAuthUser(response.access, response.refresh);
     req.headers.Authorization = `Bearer ${response.data.access}`;
     return req;
   });
+
   return axiosInstance;
 };
 

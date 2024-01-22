@@ -30,7 +30,7 @@ export const register = async (
   password2,
 ) => {
   try {
-    const { status } = await axios.post("register/", {
+    const { data } = await axios.post("register/", {
       username: username,
       first_name: firstName,
       last_name: lastName,
@@ -38,9 +38,7 @@ export const register = async (
       password: password,
       password2: password2,
     });
-    if (status === 200) {
-      return;
-    }
+    return { data, error: null };
   } catch (error) {
     return {
       data: null,
@@ -63,6 +61,7 @@ export const logout = async () => {
     console.log(error);
   }
 };
+
 export const setUser = async () => {
   const accessToken = Cookies.get("access_token");
   const refreshToken = Cookies.get("refresh_token");
@@ -72,6 +71,8 @@ export const setUser = async () => {
   if (isAccessTokenExpired(accessToken)) {
     const response = await getAccessToken(refreshToken);
     setAuthUser(response.access, response.refresh);
+  } else {
+    setAuthUser(accessToken, refreshToken);
   }
 };
 
@@ -99,6 +100,7 @@ export const getAccessToken = async (refresh_token) => {
   });
   return response.data;
 };
+
 export const isAccessTokenExpired = (accessToken) => {
   try {
     const decodedToken = jwtDecode(accessToken);
