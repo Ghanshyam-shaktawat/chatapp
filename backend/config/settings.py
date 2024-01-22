@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     "chat",
     "user",
     "corsheaders",
-    "channels",
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
 ]
@@ -150,11 +150,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Set custom made user mode for authentication
 AUTH_USER_MODEL = "user.CUstomUserModel"
 
-CHANNELS_LAYERS = {
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6739)],
+            "hosts": [("127.0.0.1", 6379)],
         },
     }
 }
