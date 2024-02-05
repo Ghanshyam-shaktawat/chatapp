@@ -51,15 +51,6 @@ export const logout = async () => {
   Cookies.remove("access_token");
   Cookies.remove("refresh_token");
   userAuthStore.getState().setUser(null);
-
-  try {
-    const { error } = await axios.post("/logout");
-    if (error) {
-      console.log(error);
-    }
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 export const setUser = async () => {
@@ -68,7 +59,7 @@ export const setUser = async () => {
   if (!accessToken || !refreshToken) {
     return;
   }
-  if (isAccessTokenExpired(accessToken)) {
+  if (!isAccessTokenExpired(accessToken)) {
     const response = await getAccessToken(refreshToken);
     setAuthUser(response.access, response.refresh);
   } else {
@@ -78,7 +69,7 @@ export const setUser = async () => {
 
 export const setAuthUser = (access_token, refresh_token) => {
   Cookies.set("access_token", access_token, {
-    expires: 1,
+    expires: 7,
     secure: true,
   });
 

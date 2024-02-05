@@ -7,6 +7,7 @@ import Register from "./views/Register";
 import MainWrapper from "./layouts/MainWrapper";
 import PrivateRoute from "./layouts/PrivateRoute";
 import Chat from "./pages/Chat";
+import Test from "./views/Private";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/test"
+              element={
+                <PrivateRoute>
+                  <Test />
+                </PrivateRoute>
+              }
+            ></Route>
           </Routes>
         </MainWrapper>
       </BrowserRouter>

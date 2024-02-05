@@ -14,7 +14,7 @@ const userAuthStore = create((set, get) => ({
   isLoggedIn: () => get().userData !== null,
 }));
 
-const development = true;
+const development = false;
 if (development) {
   mountStoreDevtool("Store", userAuthStore);
 }
