@@ -9,12 +9,15 @@ const useAxios = () => {
 
   const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
+    timeout: 5000,
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
+    console.log(refreshToken);
     if (!isAccessTokenExpired(accessToken)) return req;
 
+    console.log(refreshToken);
     const response = await getAccessToken(refreshToken);
     setAuthUser(response.access, response.refresh);
     req.headers.Authorization = `Bearer ${response.data.access}`;

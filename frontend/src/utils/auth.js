@@ -62,6 +62,7 @@ export const setUser = async () => {
   if (!isAccessTokenExpired(accessToken)) {
     const response = await getAccessToken(refreshToken);
     setAuthUser(response.access, response.refresh);
+    console.log("Access token expired!");
   } else {
     setAuthUser(accessToken, refreshToken);
   }
@@ -69,7 +70,7 @@ export const setUser = async () => {
 
 export const setAuthUser = (access_token, refresh_token) => {
   Cookies.set("access_token", access_token, {
-    expires: 7,
+    expires: 1,
     secure: true,
   });
 
@@ -95,7 +96,8 @@ export const getAccessToken = async (refresh_token) => {
 export const isAccessTokenExpired = (accessToken) => {
   try {
     const decodedToken = jwtDecode(accessToken);
-    return decodedToken.exp < Date.now() / 1000;
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    return currentTimeInSeconds > decodedToken.exp;
   } catch (err) {
     return true;
   }
