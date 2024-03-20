@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Cookies from "js-cookie";
 import { userAuthStore } from "../store/store";
-import {
-  getAccessToken,
-  // isAccessTokenExpired,
-  setAuthUser,
-} from "../utils/auth";
+import { getAccessToken, setAuthUser } from "../utils/auth";
+import useAxios from "../utils/useAxios";
 
 const Chat = () => {
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [messageHistory, setMessageHistory] = useState([]);
   const [socketUrl] = useState("ws://127.0.0.1:8000");
   const [message, setMessage] = useState("");
+  const [friendList, setFriendList] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [timer, setTimer] = useState(true);
   const [accessToken, setAccessToken] = useState(Cookies.get("access_token"));
   const [refreshToken, setRefreshToken] = useState(
     Cookies.get("refresh_token"),
   );
 
   const [user] = userAuthStore((state) => [state.user()]);
+  const api = useAxios();
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -34,26 +34,44 @@ const Chat = () => {
       }
     };
 
-    fetchTokens();
+    const fetchFriendList = async () => {
+      try {
+        const response = await api.get("/friends");
+        setFriendList(response.data);
+      } catch (error) {
+        console.log("Failed to fetch friend list:", error);
+      }
+    };
 
-    // const timer = setTimeout(() => {
-    //   // Initialize WebSocket connection after 5 seconds
-    //   // You can also conditionally initialize based on loading state or other conditions
-    //   setLoading(false);
-    // }, 3000);
+    fetchTokens();
+    fetchFriendList();
+
+    const timer = setTimeout(() => {
+      // Initialize WebSocket connection after 5 seconds
+      // You can also conditionally initialize based on loading state or other conditions
+      setTimer(false);
+    }, 3000);
 
     return () => {
-      // clearTimeout(timer);
+      clearTimeout(timer);
     };
   }, []);
 
-  useEffect(() => {
-    const expire = () => {
-      console.log("expire");
-    };
-
-    expire();
-  });
+  // useEffect(() => {
+  //   const fetchFriendList = async () => {
+  //     try {
+  //       const response = await api.get("/friends");
+  //       setFriendList(response.data);
+  //     } catch (error) {
+  //       console.log("Failed to fetch friend list:", error);
+  //     }
+  //   };
+  //
+  //   // Fetch friend list only when access token is updated
+  //   if (!loading && !timer) {
+  //     fetchFriendList();
+  //   }
+  // }, [accessToken, loading, timer]);
 
   const { readyState, sendJsonMessage } = useWebSocket(
     socketUrl,
@@ -98,7 +116,7 @@ const Chat = () => {
         ),
       // shouldConnect: () => false,
     },
-    Boolean(!loading),
+    Boolean(!loading && !timer),
   );
 
   const connectionStatus = {
@@ -124,6 +142,15 @@ const Chat = () => {
 
   return (
     <>
+      <hr />
+      <h3>Friend List:</h3>
+      <ul>
+        {friendList &&
+          friendList.map((friend) => (
+            <li key={friend.id}>{friend.username}</li>
+          ))}
+      </ul>
+      <hr />
       <h1>The websocket is currently: {connectionStatus}!</h1>
       <h2>{welcomeMessage}</h2>
       <div>

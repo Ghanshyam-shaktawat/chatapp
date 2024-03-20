@@ -1,7 +1,5 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from asgiref.sync import async_to_sync
-from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -18,7 +16,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         self.conversation_name = None
         self.conversation = None
         self.room_name = None
-        self.access_token = None
+        # self.access_token = None
 
     def connect(self):
         print("Connected")
@@ -56,9 +54,6 @@ class ChatConsumer(JsonWebsocketConsumer):
                 },
             )
 
-        elif message_type == "update_token":
-            self.handle_token_update(content)
-
     def chat_message_echo(self, event):
         print(event)
         self.send_json(event)
@@ -67,17 +62,17 @@ class ChatConsumer(JsonWebsocketConsumer):
         else:
             print("NAHI PATA")
 
-    def handle_token_update(self, content):
-        token = content.get("token")
-        if token:
-            try:
-                self.access_token = AccessToken(token)
-                print("token updated: ", self.access_token)
-                user_id = self.access_token["user_id"]
-                self.user = User.objects.get(id=user_id)
-
-            except TokenError as e:
-                print("Token update failed:", e)
-
-        else:
-            print("Token not provided in the update token message")
+    # def handle_token_update(self, content):
+    #     token = content.get("token")
+    #     if token:
+    #         try:
+    #             self.access_token = AccessToken(token)
+    #             print("token updated: ", self.access_token)
+    #             user_id = self.access_token["user_id"]
+    #             self.user = User.objects.get(id=user_id)
+    #
+    #         except TokenError as e:
+    #             print("Token update failed:", e)
+    #
+    #     else:
+    #         print("Token not provided in the update token message")
